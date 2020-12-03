@@ -32,8 +32,8 @@ class App extends Component {
           <Header/>
           {/* A <Switch> looks through its children <Route>s and renders the first one that matches the current URL. */}
           <Switch>            
-            <Route path="/home/:status" component={Home}/>
-            <Route path="/home" component={Home}/>
+            <Route path="/home/:status" component={Home} />
+            <Route path="/home" component={Home} />
             <Route path="/blog-manager" component={BlogManager} />
             <Route path="/blog" component={Blog} />
             <Route path="/auth/signup" render={(props) => <Auth {...props} signUp={true} />} />

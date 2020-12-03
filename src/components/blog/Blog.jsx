@@ -5,14 +5,13 @@ import PostCard from './PostCard';
 
 const Blog = () => {
   const [posts, setPosts] = useState([])
-  let pageContents = <Spinner />
-  let pageError = false
+  const [error, setError] = useState(false)
   let postList = []
   // let recentX = 10
 
   useEffect(() => {
-    loadPosts()
-  },[])
+    if(!posts.length) loadPosts()
+  },[posts])
 
   const loadPosts = () => {
     BlogService.getPostsAll()
@@ -20,9 +19,9 @@ const Blog = () => {
       setPosts(response.data)
     })
     .catch(e => {
-      console.log(e)
-      pageError = true
-      pageContents = <div>e</div>
+      let fetchError = e.message || e.response.data
+      console.log(fetchError)
+      setError(<h3>{fetchError}</h3>)
     })
   }
 
@@ -34,13 +33,12 @@ const Blog = () => {
     )
   }
 
-  return !pageError ? (
+  return !error ? (
     <>
       <h1>Recent posts</h1>
       {postList}
     </>
-  ) : pageContents
-  
+  ) : error  
 }
 
 export default Blog
