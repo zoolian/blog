@@ -5,6 +5,7 @@ import { withRouter } from 'react-router-dom';
 import BlogService from '../../services/BlogService';
 import AuthenticationService from '../../services/AuthenticationService'
 import PageService from '../../services/PageService.js'
+import UserService from '../../services/UserService'
 import validate from '../../utils/validate.js'
 import Spinner from '../ui/Spinner'
 import Input from '../ui/Input'
@@ -15,19 +16,19 @@ import { Context } from '../../store/Store'
 
 const PostForm = (props) => {
   const authService = new AuthenticationService()
-  const date = moment(new Date()).format('YYYY-MM-DD h:mm:ss a')
+  //const date = moment(new Date()).format('YYYY-MM-DD h:mm:ss a')
   const [state] = useContext(Context)
   const [post, setPost] = useState({
     id: props.match.params.id,
-    username: authService.loginStatus(),
+    user: state,
     title: '',
     content: '',
-    createDate: date,
-    modifiedDate: date,
+    createDate: null,
+    modifiedDate: null,
     hidden: false
   })
   const [error, setError] = useState(null)
-  const [pageValid, setPageValid] = useState(true)  
+  const [pageValid, setPageValid] = useState(true)
   let auth = false
       
   // ----------------------- VALIDATION RULES -----------------------
@@ -53,10 +54,10 @@ const PostForm = (props) => {
       return
     }
 
-    if(!authService.validate(PAGE_ID)) {
+    if(!authService.validateLocalStorage(PAGE_ID)) {
       setError(<div>Token expired</div>)
       return
-    }
+    }    
   },[])
 
   useEffect(() => {
@@ -75,7 +76,8 @@ const PostForm = (props) => {
         console.log(e)
         setError(<div>Access Denied</div>)
       })
-    }    
+    }
+    setPost({...post, user: state})
   },[state])
 
   const fetchPost = () => { 
@@ -106,7 +108,7 @@ const PostForm = (props) => {
     // url passes -1 for a new post, so any update will be > 0 id
     // the backend updates modified date on an update so that the datetime is as close to real modified time to the second as possible
     BlogService.createOrUpdatePost(post.id, post)
-    .then((response) => {
+    .then(() => {
       props.history.push("/blog-manager")
     }, (error) => {
       console.log(error)
@@ -121,7 +123,7 @@ const PostForm = (props) => {
 		}
 		setPageValid(isValid)
   }
-
+console.log(post)
   return !error ? (
     <>
       <h1>{post.id > 0 ? '' : 'New '}Post{post.id > 0 ? ` ${post.id}` : ''}</h1>

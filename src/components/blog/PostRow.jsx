@@ -23,11 +23,11 @@ const PostRow = (props) => {
       <th scope="row">
         {post.title}
       </th>
-      <th>
-        {post.id}
-      </th>
       <td>
         {moment(post.createDate).format('MM-DD-YY, h:mm')}
+      </td>
+      <td>
+        {moment(post.updateDate).format('MM-DD-YY, h:mm')}
       </td>
       <td>
         {post.content.substr(0, 45)} {post.content.length > 45 ? " ..." : ""}

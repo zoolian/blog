@@ -3,7 +3,9 @@ import Reducer from './Reducer'
 
 const initialState = {
   token: '',
+  id: '',
   username: '',
+  person: {},
   roles: [],
   loginStatus: false,
   showLoginFailed: false

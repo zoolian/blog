@@ -24,7 +24,7 @@ const BlogManager = (props) => {
       return
     }
 
-    if(!authService.validate(PAGE_ID)) { setError(<h3>Token expired</h3>) }
+    if(!authService.validateLocalStorage(PAGE_ID)) { setError(<h3>Token expired</h3>) }
   },[])
 
   // authorization check. comonent will return error if no authorization
@@ -48,7 +48,7 @@ const BlogManager = (props) => {
   },[state])
 
   const loadPosts = () => {
-    BlogService.getPostsAll(authService.loginStatus())
+    BlogService.getPostsAll(state.id)
     .then(response => {
       setPosts(response.data)
     })
@@ -95,10 +95,10 @@ const BlogManager = (props) => {
                 Title
               </th>
               <th scope="col">
-                ID
+                Created
               </th>
               <th scope="col">
-                Date Created
+                Updated
               </th>
               <th scope="col">
                 Content
