@@ -16,7 +16,7 @@ const BlogManager = (props) => {
   const authService = new AuthenticationService()
   const [error, setError] = useState(false)
   let auth = false
-  let postList = <Spinner/>
+  let postList = <tr><td><h3><Spinner/></h3></td></tr>
 
   useEffect(() => {
     if(!authService.loginStatus()) {
@@ -27,13 +27,13 @@ const BlogManager = (props) => {
     if(!authService.validateLocalStorage(PAGE_ID)) { setError(<h3>Token expired</h3>) }
   },[])
 
-  // authorization check. comonent will return error if no authorization
+  // authorization check. component will return error if no authorization
   useEffect(() => {
     if(state.roles.length && !auth) {
       PageService.getPageById(PAGE_ID)
       .then(response => {        
         state.roles.map(userRole => {
-          if(response.data.roles.some(pageRole => { return pageRole.id === userRole.id })) {
+          if(response.data.roles.some(pageRole => { return pageRole.id === userRole.id }) && !auth) {
             loadPosts()
             auth = true
           }
@@ -51,6 +51,7 @@ const BlogManager = (props) => {
     BlogService.getPostsAll(state.id)
     .then(response => {
       setPosts(response.data)
+      if(!response.data.length) postList = <tr><td><h3>You haven't expressed yourself yet! What are you waiting for?</h3></td></tr>
     })
     .catch(e => {
       let fetchError = e.message || e.response.data
@@ -77,17 +78,17 @@ const BlogManager = (props) => {
   if(posts.length) {
     postList = (
       posts.map(post => (
-        <PostRow post={post} loadPosts={loadPosts}/>
+        <PostRow key={post.id} post={post} loadPosts={loadPosts}/>
       ))
     )
-  } else postList = <h3>You haven't expressed yourself yet! What are you waiting for?</h3>
+  }
 
   const currentButtonClasses = showHidden ? "btn-over btn btn-primary" : "btn-over btn btn-secondary"
 
   return !error ? (
     <>
       <h1>{state.username}'s blog posts</h1>
-      <div className="container">
+      <div className="m-3">
         <table className="table table-striped table-hover">
           <thead>
             <tr>

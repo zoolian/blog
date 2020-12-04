@@ -1,24 +1,28 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {withRouter} from 'react-router-dom';
 import moment from 'moment'
 
 import BlogService from '../../services/BlogService'
 
 const PostRow = (props) => {
-  let errorContent = <div>Error</div>
+  const [error, setError] = useState(false)
   let {post} = props
 
   const deletePostClicked = (id) => {
     BlogService.deleteBlogPost(id)
     .then(response => {
-      errorContent = <div>e</div>
       console.log(`Piss off post! ${response.data.id} He's frickin gone.`)
       props.loadPosts();
+    })
+    .catch(e => {
+      let fetchError = e.message || e.response.data
+      console.log(fetchError)
+      setError(<tr><h3>{fetchError}</h3></tr>)
     })
 
   }
 
-  return (
+  return !error ? (
     <tr>
       <th scope="row">
         {post.title}
@@ -27,7 +31,7 @@ const PostRow = (props) => {
         {moment(post.createDate).format('MM-DD-YY, h:mm')}
       </td>
       <td>
-        {moment(post.updateDate).format('MM-DD-YY, h:mm')}
+        {moment(post.modifiedDate).format('MM-DD-YY, h:mm')}
       </td>
       <td>
         {post.content.substr(0, 45)} {post.content.length > 45 ? " ..." : ""}
@@ -45,7 +49,7 @@ const PostRow = (props) => {
         >Delete</button>
       </td>        
     </tr>
-  )
+  ) : error
 }
 
 export default withRouter(PostRow)

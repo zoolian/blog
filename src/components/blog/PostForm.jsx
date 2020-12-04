@@ -65,7 +65,7 @@ const PostForm = (props) => {
       PageService.getPageById(PAGE_ID)
       .then(response => {
         state.roles.map(userRole => {
-          if(response.data.roles.some(pageRole => { return pageRole.id === userRole.id })) {
+          if(response.data.roles.some(pageRole => { return pageRole.id === userRole.id }) && !auth) {
             if(post.id != -1) fetchPost()
             auth = true
           }
@@ -123,11 +123,11 @@ const PostForm = (props) => {
 		}
 		setPageValid(isValid)
   }
-console.log(post)
+
   return !error ? (
     <>
-      <h1>{post.id > 0 ? '' : 'New '}Post{post.id > 0 ? ` ${post.id}` : ''}</h1>
-      <div className="container">        
+      <h1>{post.id != -1 ? 'Edit ' : 'New '}Post</h1>
+      <div className="container">
         <form onSubmit={onSubmit}>
           <Input elementType="input" name="title" value={post.title} label="Title" isValid={titleValid.isValid} show={true}
             changed={(event) => {
