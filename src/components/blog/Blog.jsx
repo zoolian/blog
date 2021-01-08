@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import BlogService from '../../services/BlogService';
-import Spinner from '../ui/Spinner';
 import PostCard from './PostCard';
 
 const Blog = () => {
@@ -28,7 +27,7 @@ const Blog = () => {
   if(posts.length) {
     postList = (
       posts.map(post => (
-        <PostCard post={post} />
+        <PostCard post={post} key={post.id} />
       ))
     )
   }

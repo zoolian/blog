@@ -2,7 +2,6 @@ import { useContext } from 'react'
 import axios from 'axios'
 
 import UserService from './UserService'
-import PageService from './PageService'
 import { USERNAME_ATTRIBUTE_NAME, DATE_ATTRIBUTE_NAME } from '../Constants'
 import { Context } from '../store/Store'
 
@@ -17,7 +16,7 @@ function AuthenticationService() {
 AuthenticationService.prototype.executeJWTAuthentication = function(username, password) {  
   this.axiosInstance.post('/authenticate', { username, password })
   .then(response => {
-    this.registerJWTLogin(username, response.data.id, response.data.person, response.data.token, response.data.date)
+    this.registerJWTLogin(username, response.data.token, response.data.date)
     return false
   })
   .catch(e => {
@@ -28,13 +27,11 @@ AuthenticationService.prototype.executeJWTAuthentication = function(username, pa
   })
 }
 
-AuthenticationService.prototype.registerJWTLogin = function(username, id, person, token, date) {
+AuthenticationService.prototype.registerJWTLogin = function(username, token, date) {
   localStorage.setItem(USERNAME_ATTRIBUTE_NAME, username)
   localStorage.setItem(DATE_ATTRIBUTE_NAME, date)
   this.dispatch({ type: 'SET_USERNAME', payload: username })
-  this.dispatch({ type: 'SET_PERSON', payload: person })
   this.dispatch({ type: 'SET_LOGIN_STATUS', payload: true })
-  this.dispatch({ type: 'SET_USERID', payload: id })
   UserService.getUserByUsername(username)
   .then(response => {    
     this.dispatch({ type: 'SET_ROLES', payload: response.data.roles })
@@ -49,20 +46,18 @@ AuthenticationService.prototype.logout = function() {
 }
 
 AuthenticationService.prototype.loginStatus = function() {
-  if(localStorage.getItem(DATE_ATTRIBUTE_NAME) < Date.now()) {
+  if(localStorage.getItem(DATE_ATTRIBUTE_NAME) < new Date().toISOString()) {
     return null
   }
   return localStorage.getItem(USERNAME_ATTRIBUTE_NAME)
 }
 
-AuthenticationService.prototype.validateLocalStorage = async function() {
+AuthenticationService.prototype.validate = async function() {
   //let pageRoles = []
   await UserService.getUserByUsername(localStorage.getItem(USERNAME_ATTRIBUTE_NAME))  // reload user roles. may have been changed.
-  .then(response => {  
+  .then(response => {
     this.dispatch({ type: 'SET_ROLES', payload: response.data.roles })
     this.dispatch({ type: 'SET_USERNAME', payload: response.data.username })
-    this.dispatch({ type: 'SET_USERID', payload: response.data.id })
-    this.dispatch({ type: 'SET_PERSON', payload: response.data.person })
     this.dispatch({ type: 'SET_LOGIN_STATUS', payload: true })
   })
   .catch(e => {

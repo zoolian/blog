@@ -15,7 +15,6 @@ const BlogManager = (props) => {
   const [state] = useContext(Context)
   const authService = new AuthenticationService()
   const [error, setError] = useState(false)
-  let auth = false
   let postList = <tr><td><h3><Spinner/></h3></td></tr>
 
   useEffect(() => {
@@ -24,15 +23,16 @@ const BlogManager = (props) => {
       return
     }
 
-    if(!authService.validateLocalStorage(PAGE_ID)) { setError(<h3>Token expired</h3>) }
+    if(!authService.validate(PAGE_ID)) { setError(<h3>Token expired</h3>) }
   },[])
 
   // authorization check. component will return error if no authorization
   useEffect(() => {
+    let auth = false
     if(state.roles.length && !auth) {
       PageService.getPageById(PAGE_ID)
-      .then(response => {        
-        state.roles.map(userRole => {
+      .then(response => {
+        state.roles.forEach(userRole => {
           if(response.data.roles.some(pageRole => { return pageRole.id === userRole.id }) && !auth) {
             loadPosts()
             auth = true
@@ -65,7 +65,7 @@ const BlogManager = (props) => {
   }
 
   const addPostClicked = () => {
-    props.history.push('/post-form/-1')
+    props.history.push('/post-form/new')
   }
 
   // CONSIDER: change this to cards??

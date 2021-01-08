@@ -3,7 +3,7 @@ import { Link, withRouter } from 'react-router-dom'
 import moment from 'moment'
 
 const PostCard = (props) => {
-  let { title, user, id, content, createDate, modifiedDate, hidden } = props.post
+  let { title, user, id, content, createDate, modifiedDate } = props.post
 
   return (      
     <div className="col-lg-6 col-md-12 col-12">

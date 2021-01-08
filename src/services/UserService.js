@@ -25,7 +25,7 @@ class UserService {
   }
 
   createOrUpdateUser(id, user) {
-    if(id != -1) {
+    if(id !== "new") {
       return this.instance.put(`/users/${id}`, user)
     }
     return this.instance.post(`/users`, user)

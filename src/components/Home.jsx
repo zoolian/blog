@@ -1,5 +1,4 @@
-import { render } from '@testing-library/react';
-import React, {Component} from 'react';
+import React from 'react';
 import { withRouter, Link } from 'react-router-dom'
 import AuthenticationService from '../services/AuthenticationService.js'
 

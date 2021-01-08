@@ -25,7 +25,7 @@ class BlogService {
   }
 
   createOrUpdatePost(id, post) {
-    if(id != -1) {
+    if(id !== "new") {
       return this.instance.put(`/posts/${id}`, post)
     }
     return this.instance.post(`/posts`, post)

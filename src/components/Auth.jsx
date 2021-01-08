@@ -6,7 +6,7 @@ import Input from './ui/Input'
 import validate from '../utils/validate.js'
 import AuthenticationService from '../services/AuthenticationService'
 import {Context} from '../store/Store'
-import { USERNAME_ATTRIBUTE_NAME, DATE_ATTRIBUTE_NAME } from '../Constants'
+import {RESET_PASSWORD_URL} from '../Constants.js'
 
 const Auth = (props) => {
 	//const [password, setPassword] = useState('')
@@ -17,11 +17,11 @@ const Auth = (props) => {
 		password: '',
     enabled: true
 	})
-	const [state, dispatch] = useContext(Context);
+	const [state] = useContext(Context);
 	const [fetchError, setFetchError] = useState(null)
   const [pageValid, setPageValid] = useState(true)
   const { signUp } = props
-  const authService = new AuthenticationService
+  const authService = new AuthenticationService()
 
 // ----------------------- VALIDATION RULES -----------------------
 	const [usernameValid, setUsernameValid] = useState({
@@ -62,7 +62,7 @@ const Auth = (props) => {
 	// ----------------------- VALIDATION RULES, END -----------------------
 	
 	useEffect(() => {
-    if(!user.id || user.id == -1) {
+    if(!user.id || user.id === "new") {
       return
     }
     
@@ -151,10 +151,17 @@ const Auth = (props) => {
           />
 					<input className="btn btn-primary" type="submit" value={signUp ? 'Submit' : 'Login'} />
 				</form>
-				<div>
-					<span>{signUp ? "already a user?" : "need to create a profile?" }</span>
-					<Link to={'/auth/' + (signUp ? 'login' : 'signup')}>Sign{ signUp ? " In" : "up"}</Link>
-				</div>
+        <hr/>
+				<div className="d-flex justify-content-between mt-4">
+          <div>
+            <p>{signUp ? "Already a user? " : "Need to create a profile? " }
+            <Link className="btn btn-primary pt-0 pb-1" to={'/auth/' + (signUp ? 'login' : 'signup')}>Sign{ signUp ? " In" : "up"}</Link></p>
+          </div>
+          <div className={signUp ? "d-none" : ""}>
+            <p><span className="pr-1">Forgot your password?</span>
+            <Link className="btn btn-primary pt-0 pb-1" to={RESET_PASSWORD_URL}>Reset</Link></p>
+          </div>
+        </div>
 				
 			</div>
 		</>		

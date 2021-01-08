@@ -1,13 +1,10 @@
 import React, { useEffect, useState, useContext } from 'react';
-import moment from 'moment'
 import { withRouter } from 'react-router-dom';
 
 import BlogService from '../../services/BlogService';
 import AuthenticationService from '../../services/AuthenticationService'
 import PageService from '../../services/PageService.js'
-import UserService from '../../services/UserService'
 import validate from '../../utils/validate.js'
-import Spinner from '../ui/Spinner'
 import Input from '../ui/Input'
 import { POST_FORM_ID as PAGE_ID } from '../../Constants'
 import { Context } from '../../store/Store'
@@ -29,8 +26,7 @@ const PostForm = (props) => {
   })
   const [error, setError] = useState(null)
   const [pageValid, setPageValid] = useState(true)
-  let auth = false
-      
+        
   // ----------------------- VALIDATION RULES -----------------------
   const [titleValid, setTitleValid] = useState({
     isValid: true,
@@ -54,19 +50,20 @@ const PostForm = (props) => {
       return
     }
 
-    if(!authService.validateLocalStorage(PAGE_ID)) {
+    if(!authService.validate(PAGE_ID)) {
       setError(<div>Token expired</div>)
       return
     }    
   },[])
 
   useEffect(() => {
+    let auth = false
     if(state.roles.length && !auth) {
       PageService.getPageById(PAGE_ID)
       .then(response => {
-        state.roles.map(userRole => {
+        state.roles.forEach(userRole => {
           if(response.data.roles.some(pageRole => { return pageRole.id === userRole.id }) && !auth) {
-            if(post.id != -1) fetchPost()
+            if(post.id !== "new") fetchPost()
             auth = true
           }
           setError(auth ? false : <h3>Access Denied</h3>)
@@ -126,7 +123,7 @@ const PostForm = (props) => {
 
   return !error ? (
     <>
-      <h1>{post.id != -1 ? 'Edit ' : 'New '}Post</h1>
+      <h1>{post.id !== "new" ? 'Edit ' : 'New '}Post</h1>
       <div className="container">
         <form onSubmit={onSubmit}>
           <Input elementType="input" name="title" value={post.title} label="Title" isValid={titleValid.isValid} show={true}
