@@ -2,18 +2,18 @@ import { useContext } from 'react'
 import axios from 'axios'
 
 import UserService from './UserService'
-import { USERNAME_ATTRIBUTE_NAME, DATE_ATTRIBUTE_NAME } from '../Constants'
+import { USERNAME_ATTRIBUTE_NAME, DATE_ATTRIBUTE_NAME, API_URL } from '../Constants'
 import { Context } from '../store/Store'
 
 function AuthenticationService() {
   [this.state, this.dispatch] = useContext(Context)
   this.axiosInstance = axios.create({
-      baseURL: 'http://localhost:8080',
+      baseURL: API_URL,
       withCredentials: true
   })
 }
 
-AuthenticationService.prototype.executeJWTAuthentication = function(username, password) {  
+AuthenticationService.prototype.executeJWTAuthentication = function(username, password) {
   this.axiosInstance.post('/authenticate', { username, password })
   .then(response => {
     this.registerJWTLogin(username, response.data.token, response.data.date)

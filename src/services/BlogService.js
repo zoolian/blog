@@ -1,9 +1,11 @@
 import axios from 'axios'
 
+import { BLOG_API_URL } from '../Constants'
+
 class BlogService {
   constructor() {
     this.instance = axios.create({
-      baseURL: 'http://localhost:8080/blog',
+      baseURL: BLOG_API_URL,
       withCredentials: true
     })
   }
