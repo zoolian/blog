@@ -62,7 +62,7 @@ const Auth = (props) => {
 	// ----------------------- VALIDATION RULES, END -----------------------
 	
 	useEffect(() => {
-    if(!user.id || user.id === "new") {
+    if(!user.id || user.id === "new" || !signUp) {
       return
     }
     
@@ -120,13 +120,13 @@ const Auth = (props) => {
 			<h1 className="ml-2 d-inline">{signUp ? 'Welcome! Create your profile' : 'Enter Credentials'}</h1>
 			<div className="container">
 				<form onSubmit={onSubmit}>
-					<Input elementType="input" name="username" value={user.username} label="Username" isValid={usernameValid.isValid} show={true}
+					<Input elementType="input" name="username" value={user.username} label="Username" isValid={usernameValid.isValid} show={true} autoComplete="false_user"
             changed={(event) => {
               inputChange(event, setUser, user, { username: event.target.value }, usernameValid, setUsernameValid)
             }}
           />
 
-					<Input elementType="password" name="password" value={user.password} label="Password" isValid={passwordValid.isValid} show={true}
+					<Input elementType="password" name="password" value={user.password} label="Password" isValid={passwordValid.isValid} show={true} autoComplete="new-password"
             changed={(event) => {
               inputChange(event, setUser, user, { password: event.target.value }, passwordValid, setPasswordValid)
             }}
@@ -159,7 +159,7 @@ const Auth = (props) => {
           </div>
           <div className={signUp ? "d-none" : ""}>
             <p><span className="pr-1">Forgot your password?</span>
-            <Link className="btn btn-primary pt-0 pb-1" to={RESET_PASSWORD_URL}>Reset</Link></p>
+            <a className="btn btn-primary pt-0 pb-1" href={RESET_PASSWORD_URL}>Reset</a></p>
           </div>
         </div>
 				

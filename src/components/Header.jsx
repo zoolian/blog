@@ -48,7 +48,7 @@ const Header = (props) => {
           <span className="navbar-toggler-icon"></span>
         </button>
         <div className="collapse navbar-collapse">
-          <ul className="navbar-nav">
+          <ul className="navbar-nav mr-auto">
             <li className="nav-item">
               <NavLink className="nav-link" to="/blog">Blog</NavLink>
             </li>
