@@ -4,7 +4,7 @@ import BlogManager from './components/blog/BlogManager';
 import Blog from './components/blog/Blog'
 import Auth from './components/Auth'
 import Home from './components/Home'
-import Header from './components/Header'
+import Header from './components/ui/Header'
 import Footer from './components/Footer'
 import PostForm from './components/blog/PostForm';
 import Store from './store/Store'
