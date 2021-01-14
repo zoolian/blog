@@ -23,8 +23,8 @@ const Home = (props) => {
         <p>Welcome. Do you have thoughts? I hope so! Are some of them things you want to tell the world? Get out of your system?</p>
         <p>Let's be real. You probably already post your public thoughts and opinions to another site. One that has endless ads. 
           One that collects and harvests your personal data. How about posting your thoughts without all the noise?</p>
-        <p>And get this ... you <b>never</b> have to give your email address or phone number. No, really! <Link to="/privacy">Learn More</Link></p>
-        <Link to="/signup">Get started with quieter personal expression!</Link>
+        {/* <p>And get this ... you <b>never</b> have to give your email address or phone number. No, really! <Link to="/privacy">Learn More</Link></p> */}
+        <Link to="/auth/signup">Get started with quieter personal expression!</Link>
       </div>
     )
   }
@@ -41,7 +41,7 @@ const Home = (props) => {
 
   return (
     <>
-      <h1>Best blogger ever, ever</h1>
+      <h1>Best blogger ever, ever!</h1>
       { status !== "logout" ?
         mainContent()
         : logoutContent()

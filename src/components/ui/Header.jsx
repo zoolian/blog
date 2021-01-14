@@ -1,9 +1,9 @@
 import React, { useContext } from 'react';
 import { NavLink, withRouter } from 'react-router-dom'
-import Logo from './Logo'
+import Logo from '../Logo'
 
-import {Context} from '../store/Store'
-import AuthenticationService from '../services/AuthenticationService';
+import {Context} from '../../store/Store'
+import AuthenticationService from '../../services/AuthenticationService';
 
 const Header = (props) => {
   const [state, dispatch] = useContext(Context);
