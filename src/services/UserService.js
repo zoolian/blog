@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-import { SECURITY_API_URL } from '../Constants'
+import { SECURITY_API_URL, SIGNUP_API_URL } from '../Constants'
 
 class UserService {
   constructor() {
@@ -31,6 +31,10 @@ class UserService {
       return this.instance.put(`/users/${id}`, user)
     }
     return this.instance.post(`/users`, user)
+  }
+
+  signup(user) {
+    return axios.post(SIGNUP_API_URL, user)
   }
 
   getInstance() {

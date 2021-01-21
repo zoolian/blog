@@ -11,11 +11,12 @@ class BlogService {
   }
 
   // TODO: need a for-real all for admins
-  getPostsAll(username) {
-    if(username) {
-      return this.instance.get(`/posts/user/${username}`)
-    }
+  getPostsAll(id) {
     return this.instance.get(`/posts`)
+  }
+
+  getPostsByUser(id) {
+    return this.instance.get(`/posts/user/${id}`)
   }
 
   getPostById(id) {

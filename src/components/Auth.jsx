@@ -79,7 +79,7 @@ const Auth = (props) => {
 
   useEffect(() => {
     if(state.loginStatus) { props.history.push("/" + props.match.params.previousPage) }
-  },[state])
+  },[])
 
 	const onSubmit = (event) => {
 		event.preventDefault()
@@ -90,7 +90,7 @@ const Auth = (props) => {
 			UserService.signup(user)
 			.then(() => {
         authService.executeJWTAuthentication(user.username, user.password)
-				props.history.push("/blog-manager")
+				props.history.push("/blog-manager/new")
       })
       .catch((error) => {
 				console.log(error)

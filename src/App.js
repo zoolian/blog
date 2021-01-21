@@ -35,6 +35,7 @@ class App extends Component {
             <Route path="/home/:status" component={Home} />
             <Route path="/home" component={Home} />
             <Route path="/blog-manager" component={BlogManager} />
+            <Route path="/blog-manager/:status" component={BlogManager} />
             <Route path="/blog" component={Blog} />
             <Route path="/auth/signup" render={(props) => <Auth {...props} signUp={true} />} />
             <Route path="/auth/login/:previousPage" render={(props) => <Auth {...props} signUp={false} />} />

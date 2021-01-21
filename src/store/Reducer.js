@@ -27,6 +27,9 @@ const Reducer = (state, action) => {
     case 'SET_LOGIN_STATUS':
       return { ...state, loginStatus: action.payload }
 
+    case 'SET_VALIDATION_RESULT':
+      return { ...state, validationResult: action.payload }
+
     case 'TOGGLE_SHOW_LOGIN_FAILED':
       return { ...state, showLoginFailed: !state.showLoginFailed }
 

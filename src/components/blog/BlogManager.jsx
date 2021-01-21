@@ -1,33 +1,49 @@
-import React, { useEffect, useState, useContext } from 'react';
+import React, { useEffect, useState, useContext } from 'react'
 import { withRouter } from 'react-router-dom'
 
 import PostRow from './PostRow'
 import BlogService from '../../services/BlogService.js'
 import PageService from '../../services/PageService.js'
 import AuthenticationService from '../../services/AuthenticationService.js'
-import Spinner from '../ui/Spinner';
+import Spinner from '../ui/Spinner'
 import { BLOG_MANAGER_ID as PAGE_ID } from '../../Constants'
 import { Context } from '../../store/Store'
 
 const BlogManager = (props) => {
+  const {status} = props.match.params
   const [posts, setPosts] = useState([])
   const [showHidden, setShowHidden] = useState(false)
   const [state] = useContext(Context)
   const authService = new AuthenticationService()
   const [error, setError] = useState(false)
-  let postList = <tr><td><h3><Spinner/></h3></td></tr>
+  const [postList, setPostList] = useState(<tr><td><h5><Spinner/></h5></td></tr>)
+
+  const newAccountMessage = <tr><td><h4>You haven't expressed yourself yet! What are you waiting for? Hit the green button!</h4></td></tr>
+
+  useEffect(() => {
+    authService.validate(PAGE_ID)
+  },[])
 
   useEffect(() => {
     if(!authService.loginStatus()) {
       props.history.push("/auth/login/blog-manager")
       return
     }
-
-    if(!authService.validate(PAGE_ID)) { setError(<h3>Token expired</h3>) }
-  },[])
+    
+    if(state.validationResult) {
+      authService.logout()
+      setTimeout(() => setError(<h3>{state.validationResult}</h3>), 3000)
+      props.history.push("/auth/login")
+    }
+  },[state.validationResult])
 
   // authorization check. component will return error if no authorization
   useEffect(() => {
+    if(status === "new") {
+      setPostList(newAccountMessage)
+      return
+    }
+
     let auth = false
     if(state.roles.length && !auth) {
       PageService.getPageById(PAGE_ID)
@@ -45,13 +61,13 @@ const BlogManager = (props) => {
         setError(<h3>Error fetching page permissions: {e}</h3>)
       })
     }
-  },[state])
+  },[state.id])
 
   const loadPosts = () => {
-    BlogService.getPostsAll(state.id)
+    BlogService.getPostsByUser(state.id)
     .then(response => {
       setPosts(response.data)
-      if(!response.data.length) postList = <tr><td><h3>You haven't expressed yourself yet! What are you waiting for?</h3></td></tr>
+      if(!response.data.length) setPostList(newAccountMessage)
     })
     .catch(e => {
       let fetchError = e.message || e.response.data
@@ -80,14 +96,14 @@ const BlogManager = (props) => {
       posts.map(post => (
         <PostRow key={post.id} post={post} loadPosts={loadPosts}/>
       ))
-    )
+    )    
   }
 
   const currentButtonClasses = showHidden ? "btn-over btn btn-primary" : "btn-over btn btn-secondary"
 
   return !error ? (
     <>
-      <h1>{state.username}'s blog posts</h1>
+      <h1>{authService.loginStatus()}'s blog posts</h1>
       <div className="m-3">
         <table className="table table-striped table-hover">
           <thead>

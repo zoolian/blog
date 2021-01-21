@@ -1,3 +1,7 @@
+.parallax {
+  background-repeat: no-repeat;
+}
+
 .footer {
   position: absolute;
   bottom: 0;

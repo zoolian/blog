@@ -8,6 +8,7 @@ const initialState = {
   person: {},
   roles: [],
   loginStatus: false,
+  validationResult: '',
   showLoginFailed: false
 }
 
