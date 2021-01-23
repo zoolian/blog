@@ -16,12 +16,14 @@ const BlogManager = (props) => {
   const [state] = useContext(Context)
   const authService = new AuthenticationService()
   const [error, setError] = useState(false)
-  const [postList, setPostList] = useState(<tr><td><h5><Spinner/></h5></td></tr>)
+  let postList = <tr><td><h5><Spinner/></h5></td></tr>
 
   const newAccountMessage = <tr><td><h4>You haven't expressed yourself yet! What are you waiting for? Hit the green button!</h4></td></tr>
 
   useEffect(() => {
-    authService.validate(PAGE_ID)
+    if(authService.loginStatus()) {
+      authService.validate(PAGE_ID)
+    }
   },[])
 
   useEffect(() => {
@@ -40,7 +42,7 @@ const BlogManager = (props) => {
   // authorization check. component will return error if no authorization
   useEffect(() => {
     if(status === "new") {
-      setPostList(newAccountMessage)
+      postList = newAccountMessage
       return
     }
 
@@ -67,7 +69,7 @@ const BlogManager = (props) => {
     BlogService.getPostsByUser(state.id)
     .then(response => {
       setPosts(response.data)
-      if(!response.data.length) setPostList(newAccountMessage)
+      if(!response.data.length) postList = newAccountMessage
     })
     .catch(e => {
       let fetchError = e.message || e.response.data

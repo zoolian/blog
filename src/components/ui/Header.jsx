@@ -22,7 +22,7 @@ const Header = (props) => {
 
   useEffect(() => {
     setAuthContent(authService.loginStatus() ? (
-      <ul className="navbar-nav navbar-collapse justify-content-end">
+      <ul className="navbar-nav">
         <li className="nav-item">
           <NavLink className="nav-link" to="/profile">Welcome, {authService.loginStatus()}</NavLink>
         </li>
@@ -31,7 +31,7 @@ const Header = (props) => {
         </li>
       </ul>
     ) : (
-      <ul className="navbar-nav navbar-collapse justify-content-end">
+      <ul className="navbar-nav">
         <li className="nav-item">
           <NavLink className="nav-link" to="/auth/login">Login</NavLink>
         </li>
@@ -45,12 +45,12 @@ const Header = (props) => {
 
   return (
     <header>
-      <nav className="navbar navbar-expand-md navbar-dark bg-dark">
+      <nav className="navbar navbar-expand-md navbar-dark bg-dark justify-content-between">
         <NavLink to="/home" className="navbar-brand"><Logo/></NavLink>
-        <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
           <span className="navbar-toggler-icon"></span>
         </button>
-        <div className="collapse navbar-collapse">
+        <div className="collapse navbar-collapse" id="navbarNav">
           <ul className="navbar-nav mr-auto">
             <li className="nav-item">
               <NavLink className="nav-link" to="/blog">Blog</NavLink>

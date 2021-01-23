@@ -5,6 +5,8 @@ import moment from 'moment'
 const PostCard = (props) => {
   let { title, user, id, content, createDate, modifiedDate } = props.post
 
+  window.$('[data-toggle="tooltip"]').tooltip()
+
   return (      
     <div className="col-lg-6 col-md-12 col-12">
       <div className="card">
@@ -22,7 +24,7 @@ const PostCard = (props) => {
 
           <hr/>
           <div className="mt-2">
-            <Link to={`/comment-form/${id}`} className="btn btn-primary">Comment</Link>
+            <Link to={`/comment-form/${id}`} className="btn btn-primary disabled" data-toggle="tooltip" data-placement="top" title="Future feature">Comment</Link>
             <p className="card-text float-right text-right mt-0"><small className="text-muted">Author</small><small>{' ' + user.username}</small></p>
           </div>
                         
